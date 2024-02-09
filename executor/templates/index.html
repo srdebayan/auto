@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content {
+            flex: 2;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sidebar {
+            flex: 1;
+            padding: 20px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Improved styles for Ship Information and IMO Number/Port */
+        .content h2, .info-heading {
+            color: #333;
+            background-color: #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .info {
+            padding: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Verdana', sans-serif; /* Change to your preferred font */
+        }
+
+        /* Button styling */
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .call-operator {
+            background-color: #007bff;
+        }
+
+        .call-captain {
+            background-color: #28a745;
+        }
+
+        .emergency {
+            background-color: #dc3545;
+        }
+
+        .button {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            filter: brightness(90%);
+        }
+    </style>
+    <script>
+        // Auto-refresh the page every 5 seconds
+        setTimeout(function() {
+            location.reload();
+        }, 5000);
+    </script>
+    <title>Autonomous Smart Ship Port Allocation System</title>
+</head>
+<body>
+    <header>
+        <h1>Autonomous Smart Ship Port Allocation System</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="content">
+                <h2>Ship Information</h2>
+                <div class="info">
+                    <p class="info-heading">IMO Number</p>
+                    <p>{{ data.IMO_Number }}</p>
+                    <p class="info-heading">Port</p>
+                    <p>{{ data.Port }}</p>
+                </div>
+                <div class="button-container">
+                    <button class="button call-operator">Call Operator</button>
+                    <button class="button call-captain">Call Ship Captain</button>
+                    <button class="button emergency">Emergency</button>
+                </div>
+            </div>
+            <div class="sidebar">
+                <h2>Port and Ship </h2>
+                <!-- Add your images here -->
+                <!-- Update image paths to use url_for -->
+                <img src="{{ url_for('static', filename='ship.jpeg') }}" alt="Ship Photo" style="max-width: 100%; border-radius: 5px;">
+                <img src="{{ url_for('static', filename='port.jpg') }}" alt="Port Photo" style="max-width: 100%; margin-top: 10px; border-radius: 5px;">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Page will auto-refresh in 5 seconds</p>
+    </footer>
+</body>
+</html>

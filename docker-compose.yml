@@ -1,0 +1,126 @@
+version: "4.15.0"
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto-stb
+    restart: always
+    volumes:
+      - ./eclipse-mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.100
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+
+
+  simulator:
+    container_name: simulator
+    build:
+      context: ./simulator/
+      dockerfile: ./Dockerfile
+
+    restart: always
+    depends_on:
+      - mosquitto
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.101
+
+  #MAPE-K
+  monitor:
+    container_name: monitor-as
+    build:
+      context: ./monitor/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./monitor/:/usr/src/app/
+    restart: always
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.102
+    depends_on:
+      - mosquitto
+      - simulator
+
+
+  knowledge:
+    container_name: knowledge-as
+    build:
+      context: ./knowledge/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./knowledge/:/usr/src/app/
+    restart: always
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.103
+    depends_on:
+      - mosquitto
+      - monitor
+
+  
+  analyzer:
+    container_name: analyzer-as
+    build:
+      context: ./analyzer/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./analyzer/:/usr/src/app/
+    restart: always
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.104
+    depends_on:
+      - mosquitto
+      - knowledge
+
+  
+  planner:
+    container_name: planner-as
+    build:
+      context: ./planner/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./planner/:/usr/src/app/
+    restart: always
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.105
+    depends_on:
+      - mosquitto
+      - analyzer
+      
+
+
+  executor:
+    container_name: executor-as
+    build:
+      context: ./executor/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./executor/:/usr/src/app/
+    restart: always 
+    ports: 
+      - "5001:5000"
+    networks:
+      se4as-network:
+        ipv4_address: 173.30.0.106
+    depends_on:
+      - mosquitto
+      - planner
+      - analyzer
+      - knowledge 
+      - monitor 
+      - simulator
+
+
+
+
+networks:
+  se4as-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 173.30.0.0/16
